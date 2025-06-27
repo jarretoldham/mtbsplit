@@ -4,7 +4,7 @@ import { z } from 'zod';
 const server = Fastify();
 
 server.get('/ping', async (request, reply) => {
-  return { pong: 'it works!' };
+  return { pong: 'it works!!' };
 });
 
 server.post('/echo', async (request, reply) => {
