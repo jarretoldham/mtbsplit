@@ -38,6 +38,7 @@ coverage/
 client/node_modules/
 client/dist/
 client/build/
+.tanstack/
 
 # Backend
 server/node_modules/
