@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import {
-  parseFitFile,
-  FitParseResult,
-  SessionMesg,
-} from '../utils/fitFileUtils';
+import { parseFitFile } from '../utils/fitFileUtils';
+import type { SessionMesg, FitParseResult } from '@garmin/fitsdk';
 
 const FitFileUploader: React.FC = () => {
   const [result, setResult] = useState<FitParseResult | null>(null);
