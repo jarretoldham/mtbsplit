@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { parseFitFile } from '../utils/fitFileUtils';
-import type { SessionMesg, FitParseResult } from '@garmin/fitsdk';
+import type { SessionMesg, FitParseResult, FitMessages } from '@garmin/fitsdk';
 
-const FitFileUploader: React.FC = () => {
+export interface FitFileUploaderProps {
+  onFileParsed?: (result: FitMessages) => void;
+}
+
+const FitFileUploader: React.FC<FitFileUploaderProps> = ({ onFileParsed }) => {
   const [result, setResult] = useState<FitParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +18,9 @@ const FitFileUploader: React.FC = () => {
     try {
       const parsed = await parseFitFile(file);
       setResult(parsed);
+      if (onFileParsed) {
+        onFileParsed(parsed.messages);
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
