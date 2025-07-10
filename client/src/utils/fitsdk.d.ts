@@ -46,6 +46,11 @@ declare module '@garmin/fitsdk' {
     timestamp: Date | null;
     positionLat: number | null;
     positionLong: number | null;
+    altitude: number | null;
+    enhancedAltitude: number | null;
+    heartRate: number | null;
+    temperature: number | null;
+    gpsAccuracy: number | null;
   }
 
   export interface LapMesg {

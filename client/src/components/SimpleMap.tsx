@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
-import { FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
+import { FeatureCollection } from 'geojson';
+import { getGeoJsonBounds } from '../utils/mapboxUtils';
 
 // Set your Mapbox access token here
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
@@ -13,11 +14,11 @@ interface SimpleMapProps {
 }
 
 const _styleMap = {
-  street: 'mapbox://styles/mapbox/streets-v11',
+  street: 'mapbox://styles/mapbox/streets-v12',
   satellite: 'mapbox://styles/mapbox/satellite-v9',
-  dark: 'mapbox://styles/mapbox/dark-v10',
-  light: 'mapbox://styles/mapbox/light-v10',
-  outdoors: 'mapbox://styles/mapbox/outdoors-v11',
+  dark: 'mapbox://styles/mapbox/dark-v11',
+  light: 'mapbox://styles/mapbox/light-v11',
+  outdoors: 'mapbox://styles/mapbox/outdoors-v12',
 };
 
 const GEOJSON_SOURCE_ID = 'fit-geojson';
@@ -97,7 +98,7 @@ const SimpleMap: React.FC<SimpleMapProps> = ({
     const addLayerCallback = () => {
       if (!geojson) return;
       addLayer(geojson);
-      fitBounds(geojson); // Fit bounds to the geojson layer
+      fitBounds(geojson);
     };
     if (!map.current || !geojson || geojson.features.length === 0) return;
     if (map.current.isStyleLoaded()) {
@@ -124,24 +125,3 @@ const SimpleMap: React.FC<SimpleMapProps> = ({
 };
 
 export default SimpleMap;
-
-function getGeoJsonBounds(
-  geojson: FeatureCollection<Geometry, GeoJsonProperties>,
-) {
-  if (!geojson || !geojson.features || geojson.features.length === 0)
-    return null;
-  const bounds = new mapboxgl.LngLatBounds();
-  geojson.features.forEach((feature) => {
-    if (feature.geometry && feature.geometry.type === 'LineString') {
-      feature.geometry.coordinates.forEach((coord) => {
-        bounds.extend([coord[0], coord[1]]);
-      });
-    } else if (feature.geometry && feature.geometry.type === 'Point') {
-      bounds.extend([
-        feature.geometry.coordinates[0],
-        feature.geometry.coordinates[1],
-      ]);
-    }
-  });
-  return bounds;
-}

@@ -63,10 +63,6 @@ const FitFileUploader: React.FC<FitFileUploaderProps> = ({ onFileParsed }) => {
           <div className="mt-4">
             <h2 className="text-lg font-bold mb-2">Session Summary</h2>
             {result.messages.sessionMesgs.map(renderSessionMesg)}
-            <div className="h-24 overflow-y-scroll">
-              {result.messages.recordMesgs &&
-                JSON.stringify(result.messages.recordMesgs)}
-            </div>
           </div>
         )}
     </div>
