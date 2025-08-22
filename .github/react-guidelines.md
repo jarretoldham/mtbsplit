@@ -12,7 +12,7 @@ Apply the [general coding guidelines](./general-coding.instructions.md) to all c
 - Follow functional programming principles where possible
 - Use interfaces for data structures and type definitions
 - Prefer immutable data (const, readonly)
-- Use optional chaining (?.) and nullish coalescing (??) operators
+- Use optional chaining (?.) and null coalescing (??) operators
 
 ## React Guidelines
 

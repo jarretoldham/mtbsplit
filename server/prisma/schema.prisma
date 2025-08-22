@@ -1,5 +1,15 @@
+/**
+ * This generator creates Zod schemas from your Prisma models using npx prisma generate
+ */
 generator client {
   provider = "prisma-client-js"
+}
+
+/**
+ * This generator creates Zod schemas from your Prisma models using npx prisma generate zod
+ */
+generator zod {
+  provider = "zod-prisma-types"
 }
 
 datasource db {
@@ -7,8 +17,115 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String?
+model Athlete {
+  id         Int            @id @default(autoincrement())
+  email      String         @unique
+  firstName  String?
+  lastName   String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  tracks     TrackEffort[]
+  activities Activity[]
+  tokens     AthleteToken[]
+}
+
+/**
+ * Represents an athlete's token repository for authentication with external services like Strava.
+ * The `type` field indicates the service provider (e.g., Strava).
+ * The `accessToken` is required for API calls, while `refreshToken` is optional.
+ * The `expiresAt` field indicates when the token will expire.
+ */
+
+model AthleteToken {
+  id           Int          @id @default(autoincrement())
+  athleteId    Int
+  athlete      Athlete      @relation(fields: [athleteId], references: [id])
+  provider     TokenPovider
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+enum TokenPovider {
+  Strava
+}
+
+model Track {
+  id            Int           @id @default(autoincrement())
+  name          String
+  activityType  ActivityType  @default(Ride)
+  distance      Float // in meters
+  elevationGain Float // in meters
+  elevationLoss Float? // in meters
+  startLatLng   Float[]
+  endLatLng     Float[]
+  polyline      String? // encoded polyline
+  city          String
+  state         String
+  country       String
+  trackDetails  TrackDetails?
+  trackEfforts  TrackEffort[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model TrackDetails {
+  id        Int      @id @default(autoincrement())
+  trackId   Int      @unique
+  track     Track    @relation(fields: [trackId], references: [id])
+  streams   Json // storing streamed data as json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TrackEffort {
+  id         Int      @id @default(autoincrement())
+  trackId    Int
+  track      Track    @relation(fields: [trackId], references: [id])
+  athleteId  Int
+  athlete    Athlete  @relation(fields: [athleteId], references: [id])
+  activityId Int
+  activity   Activity @relation(fields: [activityId], references: [id])
+  startTime  DateTime // start time of the effort - in UTC
+  endTime    DateTime // end time of the effort - in UTC
+  time       Int // in seconds
+  polyline   String // encoded polyline
+  streams    Json // storing streamed data as json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Activity {
+  id            Int            @id @default(autoincrement())
+  athleteId     Int
+  athlete       Athlete        @relation(fields: [athleteId], references: [id])
+  name          String
+  type          ActivityType
+  distance      Float // in meters
+  elevationGain Float // in meters
+  elevationLoss Float? // in meters
+  averageSpeed  Float? // in meters per second
+  maxSpeed      Float? // in meters per second
+  startLatLng   Float[]
+  endLatLng     Float[]
+  polyline      String // encoded polyline
+  elapsedTime   Int // in seconds
+  startDateTime DateTime
+  timezone      String
+  source        ActivitySource @default(Strava)
+  sourceId      String? // ID from the source (e.g., Strava)
+  city          String
+  trackEfforts  TrackEffort[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum ActivityType {
+  Ride
+}
+
+enum ActivitySource {
+  Strava
 }
