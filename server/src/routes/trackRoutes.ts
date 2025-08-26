@@ -14,7 +14,7 @@ import {
 import HttpStatus from '../utils/httpStatusCodes';
 import StreamsSchema from '../schema/streamSchema';
 
-export async function trackRoutes(server: FastifyInstance) {
+export default async function trackRoutes(server: FastifyInstance) {
   server.post('/tracks', async (request, reply) => {
     const result = TrackCreateInputSchema.safeParse(request.body);
     if (!result.success) {

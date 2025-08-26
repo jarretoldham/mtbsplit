@@ -25,3 +25,9 @@ This project is a monorepo with:
 - /server: Node.js backend (Fastify, Zod, TypeScript)
 
 Both projects use ESLint, Prettier, and strict TypeScript configs.
+
+## Testing
+
+- Use Vitest for unit and integration tests
+- Write tests in the `tests` directory
+- Follow the naming convention `*.test.ts` for test files

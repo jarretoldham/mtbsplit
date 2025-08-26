@@ -85,3 +85,12 @@ import { mySchema } from '/prisma/generated/zod'; // All schemas are here by def
 ```
 
 More info: https://github.com/chrishoermann/zod-prisma-types
+
+## Testing
+
+Server uses vitest for testing
+https://vitest.dev/guide/
+
+```bash
+npm run test
+```

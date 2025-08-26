@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
     "@garmin/fitsdk": "^21.171.0",
     "@tailwindcss/postcss": "^4.1.11",
