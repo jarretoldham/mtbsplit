@@ -1,6 +1,6 @@
 import fastify from 'fastify';
-import athletesRoutes from './routes/athleteRoutes';
-import trackRoutes from './routes/trackRoutes';
+import athletesRoutes from './routes/athlete.routes';
+import trackRoutes from './routes/track.routes';
 
 async function build(opts = {}) {
   const app = fastify(opts);

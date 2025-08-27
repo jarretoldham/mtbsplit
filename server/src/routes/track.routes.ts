@@ -1,18 +1,18 @@
 import { FastifyInstance } from 'fastify';
 import {
-  create_track,
-  create_track_details,
-  get_all_tracks,
-  get_track_by_id,
-  get_track_details_by_id,
-  get_track_with_details,
-} from '../repositories/trackRepository';
+  createTrack,
+  createTrackDetails,
+  getAllTracks,
+  getTrackById,
+  getTrackDetailsById,
+  getTrackWithDetails,
+} from 'repositories/track.repository';
 import {
   TrackCreateInputSchema,
   TrackDetailsCreateInputSchema,
 } from '@prisma/generated/zod';
-import HttpStatus from '../utils/httpStatusCodes';
-import StreamsSchema from '../schema/streamSchema';
+import HttpStatus from 'utils/httpStatusCodes';
+import StreamsSchema from 'schema/stream.schema';
 
 export default async function trackRoutes(server: FastifyInstance) {
   server.post('/tracks', async (request, reply) => {
@@ -20,18 +20,18 @@ export default async function trackRoutes(server: FastifyInstance) {
     if (!result.success) {
       return reply.status(HttpStatus.BAD_REQUEST).send(result.error);
     }
-    const track = await create_track(result.data);
+    const track = await createTrack(result.data);
     return reply.status(HttpStatus.CREATED).send(track);
   });
 
   server.get('/tracks', async (request, reply) => {
-    const tracks = await get_all_tracks();
+    const tracks = await getAllTracks();
     return reply.status(HttpStatus.OK).send(tracks);
   });
 
   server.get('/tracks/:id', async (request, reply) => {
     const { id } = request.params as { id: number };
-    const track = await get_track_by_id(id);
+    const track = await getTrackById(id);
     if (!track) {
       return reply
         .status(HttpStatus.NOT_FOUND)
@@ -42,7 +42,7 @@ export default async function trackRoutes(server: FastifyInstance) {
 
   server.get('/tracks/:id/details', async (request, reply) => {
     const { id } = request.params as { id: number };
-    const details = await get_track_with_details(id);
+    const details = await getTrackWithDetails(id);
     if (!details) {
       return reply
         .status(HttpStatus.NOT_FOUND)
@@ -53,7 +53,7 @@ export default async function trackRoutes(server: FastifyInstance) {
 
   server.get('/tracks/details/:id', async (request, reply) => {
     const { id } = request.params as { id: number };
-    const details = await get_track_details_by_id(id);
+    const details = await getTrackDetailsById(id);
     if (!details) {
       return reply
         .status(HttpStatus.NOT_FOUND)
@@ -71,7 +71,7 @@ export default async function trackRoutes(server: FastifyInstance) {
     if (!streamValidation.success) {
       return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
     }
-    const details = await create_track_details(validation.data);
+    const details = await createTrackDetails(validation.data);
     return reply.status(HttpStatus.CREATED).send(details);
   });
 }

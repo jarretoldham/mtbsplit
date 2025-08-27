@@ -1,7 +1,7 @@
-import { expect, test } from 'vitest';
+import { expect, test, it } from 'vitest';
 import build from '../src/app';
 
-test('server test', async () => {
+it('server test', async () => {
   const app = await build();
 
   const response = await app.inject({

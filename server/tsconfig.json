@@ -14,5 +14,5 @@
     }
   },
   "include": ["src", "test"],
-  "exclude": ["node_modules", "strava-api-v3", "src/services/stravaService.ts"]
+  "exclude": ["node_modules", "strava-api-v3", "src/services/strava.service.ts"]
 }

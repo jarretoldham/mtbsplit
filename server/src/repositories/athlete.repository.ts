@@ -1,6 +1,5 @@
-import { PrismaClient, Prisma, Athlete } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { Prisma, Athlete } from '@prisma/client';
+import prisma from './db.client';
 
 export async function get_athlete_by_id(
   athleteId: number,

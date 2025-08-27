@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import * as athleteRepository from '../repositories/athleteRepository';
+import * as athleteRepository from 'repositories/athlete.repository';
 import {
   AthleteCreateInputSchema,
   AthleteUpdateInputSchema,
 } from '@prisma/generated/zod';
-import httpStatusCodes from '../utils/httpStatusCodes';
+import httpStatusCodes from 'utils/httpStatusCodes';
 
 export async function athletesRoutes(server: FastifyInstance) {
   // Create new athlete
