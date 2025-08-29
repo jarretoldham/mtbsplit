@@ -72,12 +72,6 @@ npm run migrate --name {MIGRATION_NAME}
 npx prisma generate
 ```
 
-- generating zod schemas from prisma types
-
-```bash
-npx prisma generate zod
-```
-
 then you can import from the `/prisma/generated/zod` folder
 
 ```ts

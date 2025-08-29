@@ -1,21 +1,33 @@
 import { Prisma, Athlete } from '@prisma/client';
 import prisma from './db.client';
+import { AthleteUpdateInput, AthleteCreateInput } from 'schema/athlete.schema';
 
-export async function get_athlete_by_id(
+export async function getAthleteById(
   athleteId: number,
 ): Promise<Athlete | null> {
   return await prisma.athlete.findUnique({ where: { id: athleteId } });
 }
 
-export async function create_athlete(
-  data: Prisma.AthleteCreateInput,
+export async function createAthlete(
+  data: AthleteCreateInput,
 ): Promise<Athlete> {
-  return await prisma.athlete.create({ data });
+  const { tokens, ...athleteData } = data;
+
+  return await prisma.athlete.create({
+    data: {
+      ...athleteData,
+      tokens: tokens
+        ? {
+            create: tokens,
+          }
+        : undefined,
+    },
+  });
 }
 
-export async function update_athlete(
+export async function updateAthlete(
   athleteId: number,
-  data: Prisma.AthleteUpdateInput,
+  data: AthleteUpdateInput,
 ): Promise<Athlete> {
   return await prisma.athlete.update({ where: { id: athleteId }, data });
 }

@@ -125,6 +125,11 @@ describe('POST /tracks', () => {
 
     expect(response.statusCode).toBe(201);
     expect(prismaMock.track.create).toHaveBeenCalledTimes(1);
+    expect(prismaMock.track.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining(input),
+      }),
+    );
   });
 
   it('creates track with details', async () => {

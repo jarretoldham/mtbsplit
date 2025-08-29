@@ -3,7 +3,7 @@ import * as athleteRepository from 'repositories/athlete.repository';
 import {
   AthleteCreateInputSchema,
   AthleteUpdateInputSchema,
-} from '@prisma/generated/zod';
+} from 'schema/athlete.schema';
 import httpStatusCodes from 'utils/httpStatusCodes';
 
 export async function athletesRoutes(server: FastifyInstance) {
@@ -13,7 +13,7 @@ export async function athletesRoutes(server: FastifyInstance) {
     if (!result.success) {
       return reply.status(httpStatusCodes.BAD_REQUEST).send(result.error);
     }
-    const athlete = await athleteRepository.create_athlete(result.data);
+    const athlete = await athleteRepository.createAthlete(result.data);
     return reply.status(httpStatusCodes.CREATED).send(athlete);
   });
 
@@ -26,7 +26,7 @@ export async function athletesRoutes(server: FastifyInstance) {
         .status(httpStatusCodes.BAD_REQUEST)
         .send({ message: 'Invalid athlete ID' });
     }
-    const athlete = await athleteRepository.get_athlete_by_id(athleteId);
+    const athlete = await athleteRepository.getAthleteById(athleteId);
     if (!athlete) {
       return reply
         .status(httpStatusCodes.NOT_FOUND)
@@ -49,7 +49,7 @@ export async function athletesRoutes(server: FastifyInstance) {
       return reply.status(httpStatusCodes.BAD_REQUEST).send(result.error);
     }
     try {
-      const athlete = await athleteRepository.update_athlete(
+      const athlete = await athleteRepository.updateAthlete(
         athleteId,
         result.data,
       );

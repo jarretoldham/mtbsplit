@@ -8,9 +8,9 @@ generator client {
 /**
  * This generator creates Zod schemas from your Prisma models using npx prisma generate zod
  */
-generator zod {
-  provider = "zod-prisma-types"
-}
+// generator zod {
+//   provider = "zod-prisma-types"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -39,7 +39,7 @@ model Athlete {
 model AthleteToken {
   id           Int          @id @default(autoincrement())
   athleteId    Int
-  athlete      Athlete      @relation(fields: [athleteId], references: [id])
+  athlete      Athlete      @relation(fields: [athleteId], references: [id], onDelete: Cascade)
   provider     TokenPovider
   accessToken  String
   refreshToken String?
