@@ -9,7 +9,12 @@ export default defineConfig({
   ],
   test: {
     environment: 'node',
-    setupFiles: ['./test/db.client.mock.ts'],
-    exclude: ['./test/integration/*', 'dist', 'node_modules'],
+    include: ['./test/integration/**/*.test.ts'],
+    exclude: [
+      './test/*',
+      './test/integration/setup.ts',
+      './test/integration/fixtures/**/*',
+    ],
+    setupFiles: ['./test/integration/setup.ts'],
   },
 });

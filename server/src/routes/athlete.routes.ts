@@ -4,7 +4,7 @@ import {
   AthleteCreateInputSchema,
   AthleteUpdateInputSchema,
 } from 'schema/athlete.schema';
-import httpStatusCodes from 'utils/httpStatusCodes';
+import httpStatusCodes from 'utils/http.status.codes';
 
 export async function athletesRoutes(server: FastifyInstance) {
   // Create new athlete

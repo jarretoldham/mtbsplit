@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run",
+    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config src/vitest.integration.config.ts",
+    "test:integration:watch": "vitest --config src/vitest.integration.config.ts",
     "migrate": "docker compose exec server npx prisma migrate dev --name"
   },
   "engines": {

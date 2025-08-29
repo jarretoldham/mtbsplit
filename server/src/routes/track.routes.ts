@@ -16,7 +16,7 @@ import {
   TrackDetailsUpdateSchema,
   TrackUpdateInputSchema,
 } from 'schema/track.schema';
-import HttpStatus from 'utils/httpStatusCodes';
+import HttpStatus from 'utils/http.status.codes';
 
 export default async function trackRoutes(server: FastifyInstance) {
   server.post('/tracks', async (request, reply) => {
