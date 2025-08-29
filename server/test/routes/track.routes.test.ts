@@ -267,7 +267,7 @@ describe('GET /tracks/:id', () => {
     expect(response.statusCode).toBe(404);
   });
 
-  it('returns 404 for a non-numeric id', async () => {
+  it('returns 400 for a non-numeric id', async () => {
     const app = await getTestApp();
 
     const trackId = 'non-numeric-id';
@@ -277,7 +277,7 @@ describe('GET /tracks/:id', () => {
       url: `/tracks/${trackId}`,
     });
 
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(400);
   });
 });
 
@@ -348,7 +348,7 @@ describe('PATCH /tracks/:id', () => {
     expect(response.statusCode).toBe(200);
     expect(prismaMock.track.update).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: `${trackId}` },
+        where: { id: trackId },
         data: expect.objectContaining(payload),
       }),
     );
@@ -387,7 +387,7 @@ describe('DELETE /tracks/:id', () => {
     expect(response.statusCode).toBe(204);
     expect(prismaMock.track.delete).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: `${trackId}` },
+        where: { id: trackId },
       }),
     );
   });
@@ -746,8 +746,7 @@ describe('PATCH /tracks/details/:id', () => {
     expect(response.statusCode).toBe(200);
     expect(prismaMock.trackDetails.update).toHaveBeenCalledWith(
       expect.objectContaining({
-        // prisma seems to turn this into a string?
-        where: { id: `${detailsId}` },
+        where: { id: detailsId },
         data: {
           streams: [
             {

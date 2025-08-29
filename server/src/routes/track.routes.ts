@@ -33,66 +33,136 @@ export default async function trackRoutes(server: FastifyInstance) {
     return reply.status(HttpStatus.OK).send(tracks);
   });
 
-  server.get('/tracks/:id', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const track = await getTrackById(id);
-    if (!track) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'Track not found' });
-    }
-    return track;
-  });
+  server.get(
+    '/tracks/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const track = await getTrackById(id);
+      if (!track) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'Track not found' });
+      }
+      return track;
+    },
+  );
 
-  server.patch('/tracks/:id', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const validation = TrackUpdateInputSchema.safeParse(request.body);
-    if (!validation.success) {
-      return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
-    }
-    const track = await getTrackById(id);
-    if (!track) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'Track not found' });
-    }
-    const updatedTrack = await updateTrack(id, validation.data);
-    return reply.status(HttpStatus.OK).send(updatedTrack);
-  });
+  server.patch(
+    '/tracks/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const validation = TrackUpdateInputSchema.safeParse(request.body);
+      if (!validation.success) {
+        return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
+      }
+      const track = await getTrackById(id);
+      if (!track) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'Track not found' });
+      }
+      const updatedTrack = await updateTrack(id, validation.data);
+      return reply.status(HttpStatus.OK).send(updatedTrack);
+    },
+  );
 
-  server.delete('/tracks/:id', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const track = await getTrackById(id);
-    if (!track) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'Track not found' });
-    }
-    await deleteTrack(id);
-    return reply.status(HttpStatus.NO_CONTENT).send();
-  });
+  server.delete(
+    '/tracks/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const track = await getTrackById(id);
+      if (!track) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'Track not found' });
+      }
+      await deleteTrack(id);
+      return reply.status(HttpStatus.NO_CONTENT).send();
+    },
+  );
 
-  server.get('/tracks/:id/details', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const details = await getTrackWithDetails(id);
-    if (!details) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'Track details not found' });
-    }
-    return details;
-  });
+  server.get(
+    '/tracks/:id/details',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const details = await getTrackWithDetails(id);
+      if (!details) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'Track details not found' });
+      }
+      return details;
+    },
+  );
 
-  server.get('/tracks/details/:id', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const details = await getTrackDetailsById(id);
-    if (!details) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'Track details not found' });
-    }
-    return details;
-  });
+  server.get(
+    '/tracks/details/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const details = await getTrackDetailsById(id);
+      if (!details) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'Track details not found' });
+      }
+      return details;
+    },
+  );
 
   server.post('/tracks/details', async (request, reply) => {
     const validation = TrackDetailsCreateInputSchema.safeParse(request.body);
@@ -114,19 +184,33 @@ export default async function trackRoutes(server: FastifyInstance) {
     return reply.status(HttpStatus.CREATED).send(details);
   });
 
-  server.patch('/tracks/details/:id', async (request, reply) => {
-    const { id } = request.params as { id: number };
-    const validation = TrackDetailsUpdateSchema.safeParse(request.body);
-    if (!validation.success) {
-      return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
-    }
-    const details = await getTrackDetailsById(id);
-    if (!details) {
-      return reply
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: 'TrackDetails not found' });
-    }
-    const updatedDetails = await updateTrackDetails(id, validation.data);
-    return reply.status(HttpStatus.OK).send(updatedDetails);
-  });
+  server.patch(
+    '/tracks/details/:id',
+    {
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', minimum: 1 },
+          },
+          required: ['id'],
+        },
+      },
+    },
+    async (request, reply) => {
+      const { id } = request.params as { id: number };
+      const validation = TrackDetailsUpdateSchema.safeParse(request.body);
+      if (!validation.success) {
+        return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
+      }
+      const details = await getTrackDetailsById(id);
+      if (!details) {
+        return reply
+          .status(HttpStatus.NOT_FOUND)
+          .send({ message: 'TrackDetails not found' });
+      }
+      const updatedDetails = await updateTrackDetails(id, validation.data);
+      return reply.status(HttpStatus.OK).send(updatedDetails);
+    },
+  );
 }

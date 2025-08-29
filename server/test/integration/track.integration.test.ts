@@ -49,17 +49,19 @@ describe('Track Routes Integration Tests', () => {
       expect(dbTrack?.name).toBe(validTrackData.name);
     });
 
-    it('should return 400 for invalid update data', async () => {
+    it('should return 400 for invalid track data', async () => {
       const response = await app.inject({
-        method: 'PATCH',
-        url: '/tracks/1',
+        method: 'POST',
+        url: '/tracks',
         payload: { name: 123 }, // Invalid: name should be string
       });
 
       expect(response.statusCode).toBe(400);
       const error = JSON.parse(response.body);
-      expect(error.issues).toBeDefined();
-      expect(error.issues[0].code).toBe('invalid_type');
+      expect(error.statusCode).toBe(400);
+      expect(error.error).toBe('Bad Request');
+      expect(error.message).toContain('invalid_type');
+      expect(error.message).toContain('Expected string, received number');
     });
   });
 
@@ -200,7 +202,9 @@ describe('Track Routes Integration Tests', () => {
 
       expect(response.statusCode).toBe(400);
       const error = JSON.parse(response.body);
-      expect(error.issues).toBeDefined();
+      expect(error.statusCode).toBe(400);
+      expect(error.error).toBe('Bad Request');
+      expect(error.message).toContain('too_small');
     });
   });
 

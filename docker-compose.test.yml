@@ -7,8 +7,16 @@ services:
       POSTGRES_PASSWORD: test_password
       POSTGRES_DB: test_db
     ports:
-      - '5434:5432'
+      - '5433:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - test_network
+
 volumes:
   db_data:
+
+# separate network to prevent conflict with development
+networks:
+  test_network:
+    driver: bridge
