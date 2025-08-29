@@ -1,6 +1,10 @@
 import { Prisma, Track, TrackDetails } from '@prisma/client';
 import prisma from './db.client';
-import { TrackCreate, TrackDetailsCreate } from 'schema/track.schema';
+import {
+  TrackCreate,
+  TrackDetailsCreate,
+  TrackUpdate,
+} from 'schema/track.schema';
 
 export async function getTrackById(trackId: number): Promise<Track | null> {
   return await prisma.track.findUnique({ where: { id: trackId } });
@@ -11,14 +15,35 @@ export async function getAllTracks(): Promise<Track[]> {
 }
 
 export async function createTrack(data: TrackCreate): Promise<Track> {
-  return await prisma.track.create({ data });
+  const { trackDetails, ...trackData } = data as any;
+  return await prisma.track.create({
+    data: trackDetails
+      ? {
+          ...trackData,
+          trackDetails: {
+            create: trackDetails,
+          },
+        }
+      : trackData,
+  });
 }
 
 export async function updateTrack(
   trackId: number,
-  data: Prisma.TrackUpdateInput,
+  data: TrackUpdate,
 ): Promise<Track> {
-  return await prisma.track.update({ where: { id: trackId }, data });
+  const { trackDetails, ...trackData } = data as any;
+  return await prisma.track.update({
+    where: { id: trackId },
+    data: trackDetails
+      ? {
+          ...trackData,
+          trackDetails: {
+            update: trackDetails,
+          },
+        }
+      : trackData,
+  });
 }
 
 export async function deleteTrack(trackId: number): Promise<Track> {
@@ -52,11 +77,13 @@ export async function createTrackDetails(
 }
 
 export async function updateTrackDetails(
-  trackId: number,
+  detailsId: number,
   data: Prisma.TrackDetailsUpdateInput,
 ): Promise<TrackDetails> {
   return await prisma.trackDetails.update({
-    where: { trackId },
-    data,
+    where: { id: detailsId },
+    data: {
+      ...data,
+    },
   });
 }
