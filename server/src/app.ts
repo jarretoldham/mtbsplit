@@ -9,11 +9,8 @@ async function build(opts = {}) {
     return { pong: 'it works!!' };
   });
 
-  console.log('Registering routes...');
   await app.register(athletesRoutes);
   await app.register(trackRoutes);
-  console.log('Routes registered.');
-
   return app;
 }
 

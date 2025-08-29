@@ -10,9 +10,8 @@ import {
 import {
   TrackCreateInputSchema,
   TrackDetailsCreateInputSchema,
-} from '@prisma/generated/zod';
+} from 'schema/track.schema';
 import HttpStatus from 'utils/httpStatusCodes';
-import StreamsSchema from 'schema/stream.schema';
 
 export default async function trackRoutes(server: FastifyInstance) {
   server.post('/tracks', async (request, reply) => {
@@ -67,9 +66,16 @@ export default async function trackRoutes(server: FastifyInstance) {
     if (!validation.success) {
       return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
     }
-    const streamValidation = StreamsSchema.safeParse(validation.data.streams);
-    if (!streamValidation.success) {
-      return reply.status(HttpStatus.BAD_REQUEST).send(validation.error);
+    const track = await getTrackWithDetails(validation.data.trackId);
+    if (!track) {
+      return reply
+        .status(HttpStatus.NOT_FOUND)
+        .send({ message: 'Track not found' });
+    }
+    if (track.trackDetails) {
+      return reply
+        .status(HttpStatus.BAD_REQUEST)
+        .send({ message: 'Track details already exist for this track' });
     }
     const details = await createTrackDetails(validation.data);
     return reply.status(HttpStatus.CREATED).send(details);

@@ -9,6 +9,6 @@ export default defineConfig({
   ],
   test: {
     environment: 'node',
-    setupFiles: ['./src/repositories/db.singleton.ts'],
+    setupFiles: ['./test/db.client.mock.ts'],
   },
 });

@@ -1,5 +1,6 @@
 import { Prisma, Track, TrackDetails } from '@prisma/client';
 import prisma from './db.client';
+import { TrackCreate, TrackDetailsCreate } from 'schema/track.schema';
 
 export async function getTrackById(trackId: number): Promise<Track | null> {
   return await prisma.track.findUnique({ where: { id: trackId } });
@@ -9,9 +10,7 @@ export async function getAllTracks(): Promise<Track[]> {
   return await prisma.track.findMany();
 }
 
-export async function createTrack(
-  data: Prisma.TrackCreateInput,
-): Promise<Track> {
+export async function createTrack(data: TrackCreate): Promise<Track> {
   return await prisma.track.create({ data });
 }
 
@@ -28,7 +27,7 @@ export async function deleteTrack(trackId: number): Promise<Track> {
 
 export async function getTrackWithDetails(
   trackId: number,
-): Promise<Track | null> {
+): Promise<(Track & { trackDetails: TrackDetails | null }) | null> {
   const track = await prisma.track.findUnique({
     where: { id: trackId },
     include: { trackDetails: true },
@@ -43,7 +42,7 @@ export async function getTrackDetailsById(
 }
 
 export async function createTrackDetails(
-  data: Prisma.TrackDetailsCreateInput,
+  data: TrackDetailsCreate,
 ): Promise<TrackDetails> {
   return await prisma.trackDetails.create({
     data: {
