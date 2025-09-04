@@ -350,10 +350,10 @@ describe('Track Routes Integration Tests', () => {
         });
       });
 
-      it('should return 404 for track without details', async () => {
+      it('should return 404 for nonexisting track', async () => {
         const response = await app.inject({
           method: 'GET',
-          url: `/tracks/${createdTrackId}/details`,
+          url: `/tracks/999/details`,
         });
 
         expect(response.statusCode).toBe(404);

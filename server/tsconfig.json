@@ -13,6 +13,6 @@
       "@prisma/*": ["../prisma/*"]
     }
   },
-  "include": ["src", "test"],
+  "include": ["src", "test", "vitest.integration.config.ts"],
   "exclude": ["node_modules", "strava-api-v3", "src/services/strava.service.ts"]
 }

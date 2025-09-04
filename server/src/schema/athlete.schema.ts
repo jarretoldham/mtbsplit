@@ -20,7 +20,7 @@ export type AthleteUpdateInput = z.infer<typeof AthleteUpdateInputSchema>;
 
 export const AthleteTokenCreateInputSchema = z
   .object({
-    provider: z.enum(['Strava']),
+    provider: z.enum(['strava']),
     accessToken: z.string(),
     refreshToken: z.string().optional().nullable(),
     expiresAt: z.coerce.date(),

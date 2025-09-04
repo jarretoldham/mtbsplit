@@ -37,25 +37,25 @@ model Athlete {
  */
 
 model AthleteToken {
-  id           Int          @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   athleteId    Int
-  athlete      Athlete      @relation(fields: [athleteId], references: [id], onDelete: Cascade)
-  provider     TokenPovider
+  athlete      Athlete       @relation(fields: [athleteId], references: [id], onDelete: Cascade)
+  provider     TokenProvider
   accessToken  String
   refreshToken String?
   expiresAt    DateTime
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
-enum TokenPovider {
-  Strava
+enum TokenProvider {
+  strava
 }
 
 model Track {
   id            Int           @id @default(autoincrement())
   name          String
-  activityType  ActivityType  @default(Ride)
+  activityType  ActivityType  @default(ride)
   distance      Float // in meters
   elevationGain Float // in meters
   elevationLoss Float? // in meters
@@ -114,7 +114,7 @@ model Activity {
   elapsedTime   Int // in seconds
   startDateTime DateTime
   timezone      String
-  source        ActivitySource @default(Strava)
+  source        ActivitySource @default(strava)
   sourceId      String? // ID from the source (e.g., Strava)
   city          String
   trackEfforts  TrackEffort[]
@@ -123,9 +123,9 @@ model Activity {
 }
 
 enum ActivityType {
-  Ride
+  ride
 }
 
 enum ActivitySource {
-  Strava
+  strava
 }

@@ -1,11 +1,11 @@
 -- CreateEnum
-CREATE TYPE "public"."TokenPovider" AS ENUM ('Strava');
+CREATE TYPE "public"."TokenProvider" AS ENUM ('strava');
 
 -- CreateEnum
-CREATE TYPE "public"."ActivityType" AS ENUM ('Ride');
+CREATE TYPE "public"."ActivityType" AS ENUM ('ride');
 
 -- CreateEnum
-CREATE TYPE "public"."ActivitySource" AS ENUM ('Strava');
+CREATE TYPE "public"."ActivitySource" AS ENUM ('strava');
 
 -- CreateTable
 CREATE TABLE "public"."Athlete" (
@@ -23,7 +23,7 @@ CREATE TABLE "public"."Athlete" (
 CREATE TABLE "public"."AthleteToken" (
     "id" SERIAL NOT NULL,
     "athleteId" INTEGER NOT NULL,
-    "provider" "public"."TokenPovider" NOT NULL,
+    "provider" "public"."TokenProvider" NOT NULL,
     "accessToken" TEXT NOT NULL,
     "refreshToken" TEXT,
     "expiresAt" TIMESTAMP(3) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE "public"."AthleteToken" (
 CREATE TABLE "public"."Track" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "activityType" "public"."ActivityType" NOT NULL DEFAULT 'Ride',
+    "activityType" "public"."ActivityType" NOT NULL DEFAULT 'ride',
     "distance" DOUBLE PRECISION NOT NULL,
     "elevationGain" DOUBLE PRECISION NOT NULL,
     "elevationLoss" DOUBLE PRECISION,
@@ -98,7 +98,7 @@ CREATE TABLE "public"."Activity" (
     "elapsedTime" INTEGER NOT NULL,
     "startDateTime" TIMESTAMP(3) NOT NULL,
     "timezone" TEXT NOT NULL,
-    "source" "public"."ActivitySource" NOT NULL DEFAULT 'Strava',
+    "source" "public"."ActivitySource" NOT NULL DEFAULT 'strava',
     "sourceId" TEXT,
     "city" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

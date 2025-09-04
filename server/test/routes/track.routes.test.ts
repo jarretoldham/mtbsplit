@@ -33,7 +33,7 @@ describe('GET /tracks', () => {
         name: 'Track 1',
         createdAt: new Date(),
         updatedAt: new Date(),
-        activityType: 'Ride',
+        activityType: 'ride',
         distance: 1000,
         elevationGain: 0,
         elevationLoss: null,
@@ -49,7 +49,7 @@ describe('GET /tracks', () => {
         name: 'Track 2',
         createdAt: new Date(),
         updatedAt: new Date(),
-        activityType: 'Ride',
+        activityType: 'ride',
         distance: 10,
         elevationGain: 0,
         elevationLoss: null,
@@ -105,7 +105,7 @@ describe('POST /tracks', () => {
 
     const input = {
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 0,
       elevationGain: 0,
       elevationLoss: 0,
@@ -137,7 +137,7 @@ describe('POST /tracks', () => {
 
     const input = {
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 0,
       elevationGain: 0,
       elevationLoss: 0,
@@ -225,7 +225,7 @@ describe('GET /tracks/:id', () => {
     const data: Track = {
       id: 1,
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,
@@ -319,7 +319,7 @@ describe('PATCH /tracks/:id', () => {
     const track: Track = {
       id: trackId,
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,
@@ -336,7 +336,7 @@ describe('PATCH /tracks/:id', () => {
 
     const payload = {
       name: 'updated test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 20,
     };
     const response = await app.inject({
@@ -364,7 +364,7 @@ describe('DELETE /tracks/:id', () => {
     const track: Track = {
       id: trackId,
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,
@@ -417,7 +417,7 @@ describe('GET /tracks/:id/details', () => {
     const data = {
       id: 1,
       name: 'test',
-      activityType: 'Ride' as const,
+      activityType: 'ride' as const,
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,
@@ -513,7 +513,7 @@ describe('POST /tracks/details', () => {
     const track: Track & { trackDetails: TrackDetails | null } = {
       id: trackId,
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,
@@ -629,7 +629,7 @@ describe('POST /tracks/details', () => {
     const track: Track & { trackDetails: any } = {
       id: trackId,
       name: 'test',
-      activityType: 'Ride',
+      activityType: 'ride',
       distance: 10,
       elevationGain: 0,
       elevationLoss: null,

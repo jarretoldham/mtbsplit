@@ -2,7 +2,7 @@ import { TrackCreate, TrackDetailsCreate } from 'schema/track.schema';
 
 export const validTrackData: TrackCreate = {
   name: 'Mountain Loop Trail',
-  activityType: 'Ride',
+  activityType: 'ride',
   distance: 15000, // 15km in meters
   elevationGain: 500,
   elevationLoss: 450,
@@ -17,7 +17,7 @@ export const validTrackData: TrackCreate = {
 // Data for Prisma create (without trackDetails)
 export const validPrismaTrackData = {
   name: 'Mountain Loop Trail',
-  activityType: 'Ride' as const,
+  activityType: 'ride' as const,
   distance: 15000, // 15km in meters
   elevationGain: 500,
   elevationLoss: 450,

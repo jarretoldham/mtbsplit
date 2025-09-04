@@ -3,7 +3,7 @@ import StreamsSchema from './stream.schema';
 
 export const TrackCreateInputSchema = z.object({
   name: z.string().min(2).max(100),
-  activityType: z.enum(['Ride']),
+  activityType: z.enum(['ride']),
   distance: z.number().min(0),
   elevationGain: z.number().min(0),
   elevationLoss: z.number().min(0).nullable(),
