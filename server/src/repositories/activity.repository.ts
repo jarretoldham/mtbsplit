@@ -36,3 +36,9 @@ export async function updateActivity(
     data,
   });
 }
+
+export async function deleteActivity(id: number): Promise<Activity> {
+  return await prisma.activity.delete({
+    where: { id },
+  });
+}
