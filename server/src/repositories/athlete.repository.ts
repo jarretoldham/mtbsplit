@@ -8,6 +8,12 @@ export async function getAthleteById(
   return await prisma.athlete.findUnique({ where: { id: athleteId } });
 }
 
+export async function getAthleteByEmail(
+  email: string,
+): Promise<Athlete | null> {
+  return await prisma.athlete.findUnique({ where: { email } });
+}
+
 export async function createAthlete(
   data: AthleteCreateInput,
 ): Promise<Athlete> {
@@ -29,7 +35,20 @@ export async function updateAthlete(
   athleteId: number,
   data: AthleteUpdateInput,
 ): Promise<Athlete> {
-  return await prisma.athlete.update({ where: { id: athleteId }, data });
+  const { tokens, ...athleteData } = data;
+
+  return await prisma.athlete.update({
+    where: { id: athleteId },
+    data: {
+      ...athleteData,
+      tokens: tokens
+        ? {
+            deleteMany: {}, // Delete existing tokens
+            create: tokens, // Create new token
+          }
+        : undefined,
+    },
+  });
 }
 
 export async function delete_athlete(athleteId: number): Promise<Athlete> {

@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-export const ActivityCreateInputSchema = z
+export const ActivityCreateInputSchemaPublic = z
   .object({
-    athleteId: z.number().min(1),
     name: z.string().min(1).max(255),
     type: z.enum(['ride']),
     distance: z.number().min(0), // in meters
@@ -22,10 +21,14 @@ export const ActivityCreateInputSchema = z
   })
   .strict();
 
+export const ActivityCreateInputSchema = ActivityCreateInputSchemaPublic.extend(
+  {
+    athleteId: z.number(),
+  },
+);
+
 export type ActivityCreateInput = z.infer<typeof ActivityCreateInputSchema>;
 
-export const ActivityUpdateInputSchema = ActivityCreateInputSchema.omit({
-  athleteId: true,
-}).partial();
+export const ActivityUpdateInputSchema = ActivityCreateInputSchema.partial();
 
 export type ActivityUpdateInput = z.infer<typeof ActivityUpdateInputSchema>;

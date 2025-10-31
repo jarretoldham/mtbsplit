@@ -18,6 +18,7 @@ export async function athletesRoutes(server: FastifyInstance) {
   });
 
   // Get athlete by ID
+  // TODO: detail and summary objects depending on authorization
   server.get('/athletes/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
     const athleteId = parseInt(id, 10);
