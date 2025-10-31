@@ -1,24 +1,19 @@
-import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
+import { FastifyInstance } from 'fastify';
+import rateLimit from '@fastify/rate-limit';
 import HttpStatusCodes from '../utils/http.status.codes';
 import * as authService from '../services/auth.service';
 import { getAllOAuthProviders } from '../config/oauth-providers.config';
-
-const RegisterSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-});
-
-const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-});
+import { LoginSchema, RegisterSchema } from '../schema/auth.schema';
 
 export async function authRoutes(server: FastifyInstance) {
+  await server.register(rateLimit, {
+    max: 20,
+    timeWindow: 1000 * 60 * 15, // 15 minutes
+  });
+
   // Get available OAuth providers
-  server.get('/auth/providers', async (request, reply) => {
+  server.get('providers', async (request, reply) => {
     return {
       oauth: getAllOAuthProviders(),
       emailPassword: true,
@@ -26,7 +21,7 @@ export async function authRoutes(server: FastifyInstance) {
   });
 
   // Email/Password Registration
-  server.post('/auth/register', async (request, reply) => {
+  server.post('register', async (request, reply) => {
     try {
       const result = RegisterSchema.safeParse(request.body);
       if (!result.success) {
@@ -47,10 +42,14 @@ export async function authRoutes(server: FastifyInstance) {
 
       return { message: 'Registration successful', user };
     } catch (error) {
-      if (error instanceof Error) {
+      if (
+        error instanceof Error &&
+        error.message === 'User with this email already exists'
+      ) {
+        // Don't reveal if email exists - be vague
         return reply
           .status(HttpStatusCodes.BAD_REQUEST)
-          .send({ message: error.message });
+          .send({ message: 'Registration failed. Please try again.' });
       }
       server.log.error(error);
       return reply
@@ -60,7 +59,7 @@ export async function authRoutes(server: FastifyInstance) {
   });
 
   // Email/Password Login
-  server.post('/auth/login', async (request, reply) => {
+  server.post('login', async (request, reply) => {
     try {
       const result = LoginSchema.safeParse(request.body);
       if (!result.success) {
@@ -97,7 +96,7 @@ export async function authRoutes(server: FastifyInstance) {
   // The /auth/strava route is auto-registered by @fastify/oauth2
 
   // OAuth Callback - Strava
-  server.get('/auth/strava/callback', async (request, reply) => {
+  server.get('/strava/callback', async (request, reply) => {
     try {
       // @fastify/oauth2 handles the code exchange automatically!
       const token =
@@ -142,14 +141,14 @@ export async function authRoutes(server: FastifyInstance) {
   // });
 
   // Logout
-  server.post('/auth/logout', async (request, reply) => {
+  server.post('/logout', async (request, reply) => {
     reply.clearCookie('auth_token');
     return { message: 'Logged out successfully' };
   });
 
   // Get current user
   server.get(
-    '/auth/me',
+    'me',
     { preHandler: [server.authenticate] },
     async (request, reply) => {
       return request.athlete;

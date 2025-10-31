@@ -52,16 +52,12 @@ export async function loginWithEmail(
 ): Promise<{ athleteId: number; email: string }> {
   const athlete = await athleteRepository.getAthleteByEmail(input.email);
 
-  if (!athlete || !athlete.passwordHash) {
-    throw new Error('Invalid email or password');
-  }
-
   const isValidPassword = await bcrypt.compare(
     input.password,
-    athlete.passwordHash,
+    athlete?.passwordHash ?? '$2b$10$invalidhashtopreventtimingattack',
   );
 
-  if (!isValidPassword) {
+  if (!athlete || !athlete.passwordHash || !isValidPassword) {
     throw new Error('Invalid email or password');
   }
 
